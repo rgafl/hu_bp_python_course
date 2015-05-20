@@ -5,47 +5,14 @@ class BioMolecule(object):
     """
     A generic molecule that has basic attributes like id, name and
     mass.
-
     @type id: int
     @type name: str
     @type mass: float
     """
     def __init__(self, id, name, mass=None):
-        self.__id = id
+        self._id = id
         self.name = name
         self.mass = mass
-    
-
-    #mass 
-    @property
-    def mass(self):
-        return self.__mass
-    
-    @mass.setter
-    def mass(self, value):
-        if not isinstance(value, float):
-            raise TypeError("Mass must be Float.")
-        self.__mass = value
-    #id
-    @property
-    def id(self):
-       return self.__id
-    
-    @id.setter
-    def id(self, value):
-        if not isinstance(value, int):
-            raise TypeError("id must be Integer.")
-        self.__id = value
-    #name
-    @property
-    def name(self):
-        return self.__name
-    
-    @name.setter
-    def name(self, value):
-        if not isinstance(value, str):
-            raise TypeError("Name must be string.")
-        self.__name = value
 
     # 1. Write setter and getter methods for all attributes.
     #    Use @property decorators as dicussed in the lecture
@@ -55,34 +22,22 @@ class Polymer(BioMolecule):
     """
     A polymer molecule that has a sequence attribute which is
     accessible via indexing the object. 
-
     @type id: int
     @type name: str
     @type sequence: str
     @type mass: float
     """
     def __init__(self, id, name, sequence, mass=None):
-        self._id = id
-        self.name = name
-        self.mass = mass
         # 3. Initialize the parent class correctly
         self._sequence = sequence
-    @property
-    def sequence(self):
-        return self.__sequence
-    
-    @sequence.setter
-    def sequence(self, value):
-        if not isinstance(value, str):
-            raise TypeError("Sequence must be a string.")
-        self.__mass = value
+
     
     # 4. Write getter and setter for sequence, again check for type
     # 5. run in ipython, instantiate this class, and test it
     def __getitem__(self, value):
         """
         Makes the sequence accessible via the indexing operators:
-        p[10] returns the tenth character in the sequence.
+<        p[10] returns the tenth character in the sequence.
         """
         return self.sequence[value]
 
@@ -96,10 +51,7 @@ class Polymer(BioMolecule):
 class MRNA(Polymer):
     def __init__(self, id, name, sequence, mass=None):
         # 6. Initialize the parent class correctly
-        self._id = id
-        self.name = name
-        self.mass = mass
-        self._sequence = sequence
+
         # 7. Create a list that stores if a ribosome is bound for each
         # codon (triplet).
         self.binding = [] # use this attribute for 7.
@@ -118,7 +70,6 @@ class Protein(Polymer):
     >> protein + "A"
     >> protein.sequence
     MVFTA
-
     
     
     """
@@ -143,10 +94,8 @@ class Protein(Polymer):
 class Ribosome(BioMolecule):
     """A ribosome can bind MRNA and translate it. After translation is
     finished it produces a protein.
-
     During initiation the ribosome checks if a given MRNA is bound
     by another ribosome and binds only if position 0 is empty.
-
     Elongation checks if the next codon is unbound and only elongates
     if the ribosome can move on. If the ribosome encounters a stop
     codon ("*") translation terminates. The MRNA is detached from the
@@ -177,7 +126,6 @@ class Ribosome(BioMolecule):
     def initiate(self, mrna):
         """
         Tries to bind to a given MRNA.
-
         @type mrna: MRNA
         """
         if not self.bound_mrna and not mrna.binding[0]:  # no mrna bound
@@ -193,7 +141,6 @@ class Ribosome(BioMolecule):
         """Elongate the new protein by the correct amino acid. Check if an
         MRNA is bound and if ribosome can move to next codon.
         Terminate if the ribosome reaches a STOP codon.
-
         @type return: Protein or False
         """
         if not self.bound_mrna: # can't elongate because there is no MRNA
